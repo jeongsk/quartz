@@ -1,3 +1,62 @@
 @use "./variables.scss" as *;
 
 // put your custom CSS here!
+
+// 한국어 본문은 어절 단위로 끊어 읽는다 — 음절 중간에서 줄바꿈되지 않게.
+p, ul, text, a, tr, td, li, ol, ul, .katex, .math, .typst-doc, .typst-doc * {
+  word-break: keep-all;
+}
+
+// 목록에서 태그는 노출하지 않는다.
+.page-listing ul.tags {
+  display: none;
+}
+
+// 위에서 태그를 숨겼는데 기본 그리드는 열(1fr)을 그대로 남겨 둔다 —
+// 목록 오른쪽이 통째로 빈 채 제목만 좁아진다. 열을 없앤다.
+li.section-li > .section {
+  grid-template-columns: fit-content(8em) 1fr;
+}
+
+// 레이아웃이 실제로 재배치되는 브레이크포인트는 800px이다.
+// (Quartz 자체 규칙은 600px에서 태그만 숨긴다.)
+@media (max-width: 800px) {
+  // 모바일에서 날짜·제목을 세로로 쌓는다. 3열을 유지하면 390px 화면에서
+  // 제목 칸이 179px까지 줄어 한 항목이 3~4줄로 접힌다.
+  li.section-li > .section {
+    grid-template-columns: 1fr;
+  }
+
+  li.section-li > .section .meta {
+    margin: 0 0 0.2em;
+  }
+
+  // 접힌 explorer는 translate(-100vw)로 밀리는데 시작점이 컨테이너 좌측
+  // 패딩(1rem)만큼 안쪽이라 16px이 화면에 남아 글자가 잘려 보인다.
+  // 패딩만큼 더 밀어 완전히 화면 밖으로 보낸다.
+  .explorer.collapsed > .explorer-content {
+    transform: translateX(calc(-100vw - 2rem));
+  }
+
+  // 노트 상단 Properties 표. 라벨 열이 150px(화면의 38%)을 먹어 값이 눌리고,
+  // 태그가 display:block이라 dev-tools 같은 값이 세로로 접힌 뒤 마지막 태그가
+  // 셀 경계 밖으로 나가 잘려 보인다. 데스크톱은 정상이라 모바일에서만 조정한다.
+  // 폭 5.5em은 현재 노출 속성(description·tags·aliases) 기준으로 맞춘 값이다.
+  .note-properties-key {
+    width: 5.5em;
+  }
+
+  .note-properties-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2em 0.5em;
+  }
+
+  .note-properties-tags .tag-link {
+    white-space: nowrap;
+  }
+
+  .note-properties-separator {
+    display: none;
+  }
+}
