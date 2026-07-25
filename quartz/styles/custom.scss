@@ -3,8 +3,16 @@
 // put your custom CSS here!
 
 // 한국어 본문은 어절 단위로 끊어 읽는다 — 음절 중간에서 줄바꿈되지 않게.
+//
+// overflow-wrap 이 함께 있어야 한다. WebKit(iOS Safari)에서 keep-all 은
+// 하이픈 위치의 줄바꿈 기회까지 없애서, 기본값 break-word 로는
+// `Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distill` 같은 토큰이 통째로 한 줄을
+// 차지한다(390px 화면에서 489px). 그러면 문서 폭이 화면을 넘겨 페이지 전체에
+// 가로 스크롤이 생긴다. anywhere 는 "넘칠 때만" 강제로 끊으므로 어절 유지와
+// 공존한다.
 p, ul, text, a, tr, td, li, ol, ul, .katex, .math, .typst-doc, .typst-doc * {
   word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 // 목록에서 태그는 노출하지 않는다.
